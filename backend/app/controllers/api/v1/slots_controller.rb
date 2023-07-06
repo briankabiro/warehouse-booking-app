@@ -29,15 +29,15 @@ class Api::V1::SlotsController < ApplicationController
 
     # TODO: set default max duration and return best response here
 
-    if !validate_timezone(timezone)
-      render json: { error: "Invalid timezone" }, status: :bad_request
+    unless validate_timezone(timezone)
+      render json: { error: 'Invalid timezone' }, status: :bad_request
       return
     end
 
     duration = validate_time(duration)
 
-    if !duration
-      render json: { error: "Invalid duration" }, status: :bad_request
+    unless duration
+      render json: { error: 'Invalid duration' }, status: :bad_request
       return
     end
 
@@ -45,7 +45,7 @@ class Api::V1::SlotsController < ApplicationController
 
     # debugger
     if !date || date < Date.current
-      render json: { error: "Invalid date" }, status: :bad_request
+      render json: { error: 'Invalid date' }, status: :bad_request
       return
     end
 
@@ -61,19 +61,19 @@ class Api::V1::SlotsController < ApplicationController
   end
 
   def validate_timezone(timezone)
-    return false if !timezone
+    return false unless timezone
 
     TZInfo::Timezone.all_identifiers.include? timezone
   end
 
   def validate_time(duration)
-    duration = ChronicDuration::parse(duration)
+    duration = ChronicDuration.parse(duration)
 
     return false if !duration || duration > 10.hours || duration < 10.minutes
 
     duration.seconds
   rescue ChronicDuration::DurationParseError
-    return false
+    false
   end
 
   def validate_date(date)

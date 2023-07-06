@@ -9,7 +9,7 @@ RSpec.describe Slot, type: :model do
 
     context 'valid start_time and end_time' do
       it 'should save the slot' do
-        slot = Slot.new(start_time: start_time, end_time: start_time + 1.hour)
+        slot = Slot.new(start_time:, end_time: start_time + 1.hour)
 
         expect(slot).to be_valid
       end
@@ -17,14 +17,13 @@ RSpec.describe Slot, type: :model do
 
     context 'invalid start_time and end_time' do
       it 'should not save when duration is less than MIN_DURATION' do
-        slot = Slot.new(start_time: start_time, end_time: start_time + 5.minutes)
+        slot = Slot.new(start_time:, end_time: start_time + 5.minutes)
 
         expect(slot).not_to be_valid
-
       end
 
       it 'should not save when duration is more than MAX_DURATION' do
-        slot = Slot.new(start_time: start_time, end_time: start_time + 12.hours)
+        slot = Slot.new(start_time:, end_time: start_time + 12.hours)
 
         expect(slot).not_to be_valid
       end
@@ -32,7 +31,7 @@ RSpec.describe Slot, type: :model do
 
     context 'start_time should be less than end_time' do
       it 'should not save the slot' do
-        slot = Slot.new(start_time: start_time, end_time: 1.day.ago)
+        slot = Slot.new(start_time:, end_time: 1.day.ago)
 
         expect(slot).not_to be_valid
       end
@@ -48,13 +47,13 @@ RSpec.describe Slot, type: :model do
 
     context 'end_time' do
       it 'should save the slot if end time is a multiple of 5' do
-        slot = Slot.new(start_time: start_time, end_time: start_time + 10.minutes)
+        slot = Slot.new(start_time:, end_time: start_time + 10.minutes)
 
         expect(slot).to be_valid
       end
 
       it 'should not save the slot if end time is not a multiple of 5' do
-        slot = Slot.new(start_time: start_time, end_time: start_time + 7.minutes)
+        slot = Slot.new(start_time:, end_time: start_time + 7.minutes)
 
         expect(slot).not_to be_valid
       end
@@ -63,11 +62,11 @@ RSpec.describe Slot, type: :model do
     context 'overlapping slots' do
       let(:start_time) { Time.current }
       let(:end_time) { 1.hour.from_now }
-      let!(:slot) { Slot.create(start_time: start_time, end_time: end_time) }
-      
+      let!(:slot) { Slot.create(start_time:, end_time:) }
+
       it 'validates slots are unique' do
-        duplicate_slot = Slot.new(start_time: start_time, end_time: 5.minutes.from_now)
-        
+        duplicate_slot = Slot.new(start_time:, end_time: 5.minutes.from_now)
+
         expect(duplicate_slot).not_to be_valid
       end
     end

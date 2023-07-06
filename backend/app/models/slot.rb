@@ -17,26 +17,26 @@ class Slot < ApplicationRecord
   def start_is_multiple_of_15_minutes?
     return unless start_time?
 
-    if !multiple_of_15(start_time)
-      errors.add(:start_time, "should be a multiple of 15 minutes")
-    end
+    return if multiple_of_15(start_time)
+
+    errors.add(:start_time, 'should be a multiple of 15 minutes')
   end
 
   def end_is_multiple_of_5_minutes?
     return unless end_time?
 
-    if !multiple_of_5(end_time)
-      errors.add(:end_time, "should be a multiple of 5 minutes")
-    end
+    return if multiple_of_5(end_time)
+
+    errors.add(:end_time, 'should be a multiple of 5 minutes')
   end
 
   def valid_slot_times?
     return unless start_time? && end_time?
 
-    if !end_time.after?(start_time)
-      errors.add(:start_time, 'must be before End Time')
-      errors.add(:end_time, ' must be after Start Time')
-    end
+    return if end_time.after?(start_time)
+
+    errors.add(:start_time, 'must be before End Time')
+    errors.add(:end_time, ' must be after Start Time')
   end
 
   def valid_duration?
@@ -44,19 +44,19 @@ class Slot < ApplicationRecord
 
     duration = end_time - start_time
 
-    if duration < DEFAULT_MIN_DURATION || duration > DEFAULT_MAX_DURATION
-      errors.add(:base, "Duration must be between #{DEFAULT_MIN_DURATION} minutes and #{DEFAULT_MAX_DURATION} hours")
-    end
+    return unless duration < DEFAULT_MIN_DURATION || duration > DEFAULT_MAX_DURATION
+
+    errors.add(:base, "Duration must be between #{DEFAULT_MIN_DURATION} minutes and #{DEFAULT_MAX_DURATION} hours")
   end
 
   def other_slot_overlap?
-    sql = ":end_time > start_time and end_time > :start_time"
+    sql = ':end_time > start_time and end_time > :start_time'
 
-    is_overlapping = Slot.where(sql, start_time: start_time, end_time: end_time).exists?
+    is_overlapping = Slot.where(sql, start_time:, end_time:).exists?
 
-    if is_overlapping
-      errors.add(:base, "Slot overlaps with other slots")
-    end
+    return unless is_overlapping
+
+    errors.add(:base, 'Slot overlaps with other slots')
   end
 
   def assign_uuid
@@ -67,13 +67,13 @@ class Slot < ApplicationRecord
 
   # TODO: move this code somewhere?
   def multiple_of_15(time)
-    minutes = time.strftime("%M").to_i
+    minutes = time.strftime('%M').to_i
 
     minutes % 15 == 0
   end
 
   def multiple_of_5(time)
-    minutes = time.strftime("%M").to_i
+    minutes = time.strftime('%M').to_i
 
     minutes % 5 == 0
   end
