@@ -50,6 +50,11 @@ Clone the repo by running:
 4. Visit `localhost:8081` on the browser to see the React app
 5. You are now ready to book some slots! Enjoy.
 
+#### Screenshots
+![image](https://github.com/briankabiro/warehouse-booking-app/assets/22860561/94a64283-35aa-41e0-8521-eaa397d339b6)
+![image](https://github.com/briankabiro/warehouse-booking-app/assets/22860561/fb0d3f0c-4749-4afc-ad00-40790c3c0f9f)
+![image](https://github.com/briankabiro/warehouse-booking-app/assets/22860561/79c06d83-5668-46b6-ae9d-199b996dc07d)
+
 #### Technologies Used
 - Ant Design
 - Full Calendar
