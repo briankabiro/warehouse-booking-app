@@ -1,8 +1,9 @@
 class Api::V1::SlotsController < ApplicationController
   before_action :validate_slot_params, only: :search
+  before_action :validate_start_and_end, only: %i[booked_slots create]
 
   def booked_slots
-    booked_slots = Slot.where(start_time: params[:start_time]...params[:end_time])
+    booked_slots = Slot.where(start_time: slot_params[:start_time]...slot_params[:end_time])
 
     render json: booked_slots
   end
@@ -10,8 +11,8 @@ class Api::V1::SlotsController < ApplicationController
   def create
     # TODO: should i add more validation for start/end time
     slot = Slot.new(
-      start_time: params[:start_time],
-      end_time: params[:end_time]
+      start_time: slot_params[:start_time],
+      end_time: slot_params[:end_time]
     )
 
     if slot.save
@@ -33,6 +34,12 @@ class Api::V1::SlotsController < ApplicationController
 
   def slot_params
     params.permit(:duration, :date, :start_time, :end_time, :timezone)
+  end
+
+  def validate_start_and_end
+    return if slot_params[:start_time].present? && slot_params[:end_time].present?
+
+    render json: { errors: 'Invalid start or end time' }, status: :bad_request
   end
 
   def validate_slot_params
