@@ -37,11 +37,13 @@ const SlotsCalendar = () => {
       });
   }, []);
 
-  const renderEventContent = (eventInfo) => (
-    <>
-      <b>{eventInfo.timeText}</b>
-    </>
-  );
+  const renderEventContent = (eventInfo) => {
+    return (
+      <>
+        <b>{eventInfo.timeText}</b>
+      </>
+    );
+  }
 
   return (
     <>
@@ -49,10 +51,12 @@ const SlotsCalendar = () => {
 
       <FullCalendar
         plugins={[timeGridPlugin]}
-        initialView=""
         events={bookings}
         eventContent={renderEventContent}
-        eventMinHeight={30}
+        eventMinHeight={20}
+        expandRows={true}
+        nowIndicator={true}
+        allDaySlot={false}
       />
     </>
   );
