@@ -1,7 +1,7 @@
 class AvailableSlots
   def initialize(date, duration, timezone)
-    @date = date
-    @duration = duration
+    @date = Date.parse(date)
+    @duration = ChronicDuration.parse(duration)
     @timezone = timezone
   end
 
