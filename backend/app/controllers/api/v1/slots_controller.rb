@@ -9,7 +9,6 @@ class Api::V1::SlotsController < ApplicationController
   end
 
   def create
-    # TODO: should i add more validation for start/end time
     slot = Slot.new(
       start_time: slot_params[:start_time],
       end_time: slot_params[:end_time]
