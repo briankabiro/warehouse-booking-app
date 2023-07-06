@@ -3,6 +3,7 @@ This app is a warehouse booking app. It is built with a Ruby on Rails API and a 
 
 Features Summary:
 - users can search for available slots and book an available one
+- users can view slots that have already been booked on the calendar
 - slots can't overlap with existing ones
 - slots start at multiple of 15 minutes i.e 9:15, 10:00
 - minimum duration for a slot is 10 minutes 
