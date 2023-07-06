@@ -52,6 +52,7 @@ const SlotsCalendar = () => {
         initialView=""
         events={bookings}
         eventContent={renderEventContent}
+        eventMinHeight={30}
       />
     </>
   );
