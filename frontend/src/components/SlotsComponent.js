@@ -31,13 +31,13 @@ export default function SlotsComponent() {
 
   const fetchSlots = (e) => {
     e.preventDefault();
-
+  
     if (!date || !duration) {
       return;
     }
-
+  
     let { timeZone } = Intl.DateTimeFormat().resolvedOptions();
-
+  
     axios
       .post(SEARCH_SLOTS_URL, {
         date: date,
@@ -46,21 +46,23 @@ export default function SlotsComponent() {
       })
       .then((response) => {
         setAvailableSlots(response.data);
-        setNoSlotsText(
-          `No slots to show for ${formatTimeToDay(
-            date,
-          )}. Kindly choose another date`,
-        );
+        setNoSlotsText(`No slots available for ${formatTimeToDay(date)}. Please choose another date.`);
       })
       .catch((error) => {
-        setNoSlotsText(
-          `Error when fetching slots for ${formatTimeToDay(
-            date,
-          )}. Kindly choose another date`,
-        );
+        setNoSlotsText(`Error fetching slots for ${formatTimeToDay(date)}. Please try again later.`);
       });
   };
 
+  const handleSuccessfulSlotBooking = (response) => {
+    let start_time = formatTimetoHHMM(response.data.start_time);
+    let end_time = formatTimetoHHMM(response.data.end_time);
+    let successModalText = `Slot booked successfully from ${start_time} to ${end_time} on ${formatTimeToDay(date)}`;
+  
+    setSuccessModalText(successModalText);
+    setSuccessModalOpen(true);
+    removeCurrentSlot();
+  };
+  
   const createSlot = () => {
     axios
       .post(API_SLOTS_URL, {
@@ -68,24 +70,13 @@ export default function SlotsComponent() {
         end_time: currentSlot.end_time,
       })
       .then((response) => {
-        // TODO: move this logic to a function instead of writing all logic here
-        let start_time = formatTimetoHHMM(response.data.start_time);
-        let end_time = formatTimetoHHMM(response.data.end_time);
-        let successModalText = `Slot booked successfully from ${start_time} to ${end_time} on ${formatTimeToDay(
-          date,
-        )}`;
-
-        setSuccessModalText(successModalText);
-        setSuccessModalOpen(true);
-        removeCurrentSlot();
+        handleSuccessfulSlotBooking(response);
       })
       .catch((error) => {
         setErrorModalOpen(true);
-        setErrorModalText(
-          "Slot not created. Kindly book a slot at another time",
-        );
+        setErrorModalText("Slot not created. Kindly book a slot at another time");
       });
-
+  
     setModalOpen(false);
   };
 
@@ -99,15 +90,16 @@ export default function SlotsComponent() {
     setDuration(timeString);
   };
 
+  const generateModalText = (slot) => {
+    let start_time = formatTimetoHHMM(slot.start_time);
+    let end_time = formatTimetoHHMM(slot.end_time);
+    return `Book a slot from ${start_time} to ${end_time} on ${formatTimeToDay(date)}`;
+  };
+  
   const handleCardClick = (slot) => {
     setCurrentSlot(slot);
     setModalOpen(true);
-    let start_time = formatTimetoHHMM(slot.start_time);
-    let end_time = formatTimetoHHMM(slot.end_time);
-    let modal_text = `Book a slot from ${start_time} to ${end_time} on ${formatTimeToDay(
-      date,
-    )}`;
-    setModalText(modal_text);
+    setModalText(generateModalText(slot));
   };
 
   return (
