@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import axios from "axios";
 import dayjs from "dayjs";
+const BOOKED_SLOTS_URL = `${process.env.REACT_APP_API_SLOTS_URL}/booked_slots`
 
 const SlotsCalendar = () => {
   const [bookings, setBookings] = useState([]);
@@ -24,7 +25,7 @@ const SlotsCalendar = () => {
 
   useEffect(() => {
     axios
-      .post("http://localhost:3000/api/v1/slots/booked_slots", {
+      .post(BOOKED_SLOTS_URL, {
         start_time: startOfWeek(),
         end_time: endOfWeek(),
       })

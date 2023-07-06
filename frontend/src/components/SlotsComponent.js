@@ -13,6 +13,8 @@ import SlotBookedSuccessModal from "./Slots/SlotBookedSuccessModal";
 import SlotBookedErrorModal from "./Slots/SlotBookedErrorModal";
 var localizedFormat = require("dayjs/plugin/localizedFormat");
 dayjs.extend(localizedFormat);
+const API_SLOTS_URL = `${process.env.REACT_APP_API_SLOTS_URL}`
+const SEARCH_SLOTS_URL = `${API_SLOTS_URL}/search`
 
 export default function SlotsComponent() {
   const [date, setDate] = useState(dayjs());
@@ -37,7 +39,7 @@ export default function SlotsComponent() {
     let { timeZone } = Intl.DateTimeFormat().resolvedOptions();
 
     axios
-      .post("http://localhost:3000/api/v1/slots/search", {
+      .post(SEARCH_SLOTS_URL, {
         date: date,
         duration: convertTimeFormat(duration),
         timezone: timeZone,
@@ -61,7 +63,7 @@ export default function SlotsComponent() {
 
   const createSlot = () => {
     axios
-      .post("http://localhost:3000/api/v1/slots", {
+      .post(API_SLOTS_URL, {
         start_time: currentSlot.start_time,
         end_time: currentSlot.end_time,
       })
