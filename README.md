@@ -1,5 +1,5 @@
 ## README
-This app is a warehouse booking app. It is built with a Ruby on Rails API and a React frontend.
+This app is a warehouse booking app. It is built with a Ruby on Rails API and a React frontend. 📦🚚
 
 Features Summary:
 - users can search for available slots and book an available one
@@ -46,6 +46,7 @@ Clone the repo by running: `git clone git@github.com:briankabiro/warehouse-booki
 3. Start the application:
 `yarn start`
 4. Visit `localhost:8081` on the browser to see the React app
+5. You are now ready to book some slots! Enjoy.
 
 #### Technologies Used
 - Ant Design
