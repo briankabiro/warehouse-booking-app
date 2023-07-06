@@ -1,31 +1,34 @@
 class Slot < ApplicationRecord
   DEFAULT_MAX_DURATION = 10.hours
   DEFAULT_MIN_DURATION = 10.minutes
+  DEFAULT_START_MULTIPLE = 15
+  DEFAULT_END_MULTIPLE = 5
 
   before_create :assign_uuid
-  validate :valid_slot_times?
-  validate :other_slot_overlap?
-  validate :valid_duration?
-  validate :start_is_multiple_of_15_minutes?
-  validate :end_is_multiple_of_5_minutes?
-  # TODO: load validators from another file and include them here
-  # TODO: validate that slot minimum is 10 minutes
 
   validates :start_time, presence: true
   validates :end_time, presence: true
 
-  def start_is_multiple_of_15_minutes?
-    return unless start_time?
+  validate :valid_start_time?
+  validate :valid_end_time?
+  validate :valid_duration?
+  validate :valid_slot_times?
+  validate :other_slot_overlap?
 
-    return if multiple_of_15(start_time)
+  private
+
+  def assign_uuid
+    self.id = SecureRandom.uuid
+  end
+
+  def valid_start_time?
+    return unless start_time? && !multiple_of_start(start_time)
 
     errors.add(:start_time, 'should be a multiple of 15 minutes')
   end
 
-  def end_is_multiple_of_5_minutes?
-    return unless end_time?
-
-    return if multiple_of_5(end_time)
+  def valid_end_time?
+    return unless end_time? && !multiple_of_end(end_time)
 
     errors.add(:end_time, 'should be a multiple of 5 minutes')
   end
@@ -33,10 +36,9 @@ class Slot < ApplicationRecord
   def valid_slot_times?
     return unless start_time? && end_time?
 
-    return if end_time.after?(start_time)
-
-    errors.add(:start_time, 'must be before End Time')
-    errors.add(:end_time, ' must be after Start Time')
+    if !end_time.after?(start_time)
+      errors.add(:end_time, 'must be after start')
+    end
   end
 
   def valid_duration?
@@ -59,22 +61,16 @@ class Slot < ApplicationRecord
     errors.add(:base, 'Slot overlaps with other slots')
   end
 
-  def assign_uuid
-    self.id = SecureRandom.uuid
-  end
-
-  private
-
   # TODO: move this code somewhere?
-  def multiple_of_15(time)
-    minutes = time.strftime('%M').to_i
-
-    minutes % 15 == 0
+  def multiple_of_start(time)
+    (minutes(time) % DEFAULT_START_MULTIPLE).zero? 
   end
 
-  def multiple_of_5(time)
-    minutes = time.strftime('%M').to_i
-
-    minutes % 5 == 0
+  def multiple_of_end(time)
+    (minutes(time) % DEFAULT_END_MULTIPLE).zero? 
+  end
+  
+  def minutes(time)
+    time.strftime('%M').to_i
   end
 end
