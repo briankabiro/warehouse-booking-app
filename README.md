@@ -18,7 +18,8 @@ To run the app successfully, the following must be installed in your local envir
 ```
 
 #### Setup
-Clone the repo by running: `git clone git@github.com:briankabiro/warehouse-booking-app.git`
+Clone the repo by running: 
+`git clone git@github.com:briankabiro/warehouse-booking-app.git`
 
 #### Backend setup
 1. From the terminal, navigate to the backend folder: `cd warehouse-booking-app/backend`
