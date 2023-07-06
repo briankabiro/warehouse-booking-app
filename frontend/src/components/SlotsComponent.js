@@ -6,6 +6,7 @@ import {
   formatTimetoHHMM,
   formatTimeToDay,
 } from "../utils/utils";
+import { Space } from "antd";
 import SlotCard from "./Slots/SlotCard";
 import FetchSlotsForm from "./Slots/FetchSlotsForm";
 import SearchSlotsModal from "./Slots/SearchSlotsModal";
@@ -104,42 +105,46 @@ export default function SlotsComponent() {
 
   return (
     <>
-      <FetchSlotsForm
-        setDate={setDate}
-        fetchSlots={fetchSlots}
-        handleDuration={handleDuration}
-      />
+      <Space direction="vertical" size="middle">
+        <FetchSlotsForm
+          setDate={setDate}
+          fetchSlots={fetchSlots}
+          handleDuration={handleDuration}
+        />
 
-      <SearchSlotsModal
-        openModal={openModal}
-        createSlot={createSlot}
-        setModalOpen={setModalOpen}
-        modalText={modalText}
-      />
+        <SearchSlotsModal
+          openModal={openModal}
+          createSlot={createSlot}
+          setModalOpen={setModalOpen}
+          modalText={modalText}
+        />
 
-      <SlotBookedSuccessModal
-        openSuccessModal={openSuccessModal}
-        setSuccessModalOpen={setSuccessModalOpen}
-        successModalText={successModalText}
-      />
+        <SlotBookedSuccessModal
+          openSuccessModal={openSuccessModal}
+          setSuccessModalOpen={setSuccessModalOpen}
+          successModalText={successModalText}
+        />
 
-      <SlotBookedErrorModal
-        errorModalOpen={errorModalOpen}
-        setErrorModalOpen={setErrorModalOpen}
-        errorModalText={errorModalText}
-      />
+        <SlotBookedErrorModal
+          errorModalOpen={errorModalOpen}
+          setErrorModalOpen={setErrorModalOpen}
+          errorModalText={errorModalText}
+        />
 
-      {availableSlots.length === 0 ? (
-        <p>{noSlotsText}</p>
-      ) : (
-        availableSlots.map((slot, index) => (
-          <SlotCard
-            handleCardClick={handleCardClick}
-            index={index}
-            slot={slot}
-          />
-        ))
-      )}
+        <Space direction="vertical">
+          {availableSlots.length === 0 ? (
+            <p>{noSlotsText}</p>
+          ) : (
+            availableSlots.map((slot, index) => (
+              <SlotCard
+                handleCardClick={handleCardClick}
+                index={index}
+                slot={slot}
+              />
+            ))
+          )}
+        </Space>
+      </Space>
     </>
   );
 }

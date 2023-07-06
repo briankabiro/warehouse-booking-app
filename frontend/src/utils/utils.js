@@ -7,7 +7,7 @@ export const formatTimetoHHMM = (time) => {
 }
 
 export const formatTimeToDay = (date) => {
-  return dayjs(date).format('LL');
+  return dayjs(date).format('dddd, MMMM D, YYYY');
 }
 
 export const convertTimeFormat = (time) => {
