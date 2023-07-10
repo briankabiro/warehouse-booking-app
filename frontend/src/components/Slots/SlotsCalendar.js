@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import axios from "axios";
 import dayjs from "dayjs";
-const BOOKED_SLOTS_URL = `${process.env.REACT_APP_API_SLOTS_URL}/booked_slots`
+const BOOKED_SLOTS_URL = `${process.env.REACT_APP_API_SLOTS_URL}/booked_slots`;
 
 const SlotsCalendar = () => {
   const [bookings, setBookings] = useState([]);
@@ -43,7 +43,7 @@ const SlotsCalendar = () => {
         <b>{eventInfo.timeText}</b>
       </>
     );
-  }
+  };
 
   return (
     <>

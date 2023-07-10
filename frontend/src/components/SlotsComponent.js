@@ -14,8 +14,8 @@ import SlotBookedSuccessModal from "./Slots/SlotBookedSuccessModal";
 import SlotBookedErrorModal from "./Slots/SlotBookedErrorModal";
 var localizedFormat = require("dayjs/plugin/localizedFormat");
 dayjs.extend(localizedFormat);
-const API_SLOTS_URL = `${process.env.REACT_APP_API_SLOTS_URL}`
-const SEARCH_SLOTS_URL = `${API_SLOTS_URL}/search`
+const API_SLOTS_URL = `${process.env.REACT_APP_API_SLOTS_URL}`;
+const SEARCH_SLOTS_URL = `${API_SLOTS_URL}/search`;
 
 export default function SlotsComponent() {
   const [date, setDate] = useState(dayjs());
@@ -32,13 +32,13 @@ export default function SlotsComponent() {
 
   const fetchSlots = (e) => {
     e.preventDefault();
-  
+
     if (!date || !duration) {
       return;
     }
-  
-    let { timeZone } = Intl.DateTimeFormat().resolvedOptions();
-  
+
+    const { timeZone } = Intl.DateTimeFormat().resolvedOptions();
+
     axios
       .post(SEARCH_SLOTS_URL, {
         date: date,
@@ -47,23 +47,33 @@ export default function SlotsComponent() {
       })
       .then((response) => {
         setAvailableSlots(response.data);
-        setNoSlotsText(`No slots available for ${formatTimeToDay(date)}. Please choose another date.`);
+        setNoSlotsText(
+          `No slots available for ${formatTimeToDay(
+            date,
+          )}. Please choose another date.`,
+        );
       })
       .catch((error) => {
-        setNoSlotsText(`Error fetching slots for ${formatTimeToDay(date)}. Please try again later.`);
+        setNoSlotsText(
+          `Error fetching slots for ${formatTimeToDay(
+            date,
+          )}. Please try again later.`,
+        );
       });
   };
 
   const handleSuccessfulSlotBooking = (response) => {
-    let start_time = formatTimetoHHMM(response.data.start_time);
-    let end_time = formatTimetoHHMM(response.data.end_time);
-    let successModalText = `Slot booked successfully from ${start_time} to ${end_time} on ${formatTimeToDay(date)}`;
-  
+    const start_time = formatTimetoHHMM(response.data.start_time);
+    const end_time = formatTimetoHHMM(response.data.end_time);
+    const successModalText = `Slot booked successfully from ${start_time} to ${end_time} on ${formatTimeToDay(
+      date,
+    )}`;
+
     setSuccessModalText(successModalText);
     setSuccessModalOpen(true);
     removeCurrentSlot();
   };
-  
+
   const createSlot = () => {
     axios
       .post(API_SLOTS_URL, {
@@ -75,9 +85,11 @@ export default function SlotsComponent() {
       })
       .catch((error) => {
         setErrorModalOpen(true);
-        setErrorModalText("Slot not created. Kindly book a slot at another time");
+        setErrorModalText(
+          "Slot not created. Kindly book a slot at another time",
+        );
       });
-  
+
     setModalOpen(false);
   };
 
@@ -92,11 +104,13 @@ export default function SlotsComponent() {
   };
 
   const generateModalText = (slot) => {
-    let start_time = formatTimetoHHMM(slot.start_time);
-    let end_time = formatTimetoHHMM(slot.end_time);
-    return `Book a slot from ${start_time} to ${end_time} on ${formatTimeToDay(date)}`;
+    const start_time = formatTimetoHHMM(slot.start_time);
+    const end_time = formatTimetoHHMM(slot.end_time);
+    return `Book a slot from ${start_time} to ${end_time} on ${formatTimeToDay(
+      date,
+    )}`;
   };
-  
+
   const handleCardClick = (slot) => {
     setCurrentSlot(slot);
     setModalOpen(true);
